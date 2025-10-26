@@ -8,6 +8,7 @@ services:
     environment:
       - PORT=${APP_PORT}
       - RELEASE_ID=${RELEASE_ID_BLUE}
+      - APP_POOL=blue
     ports:
       # Expose 8081 for grader to trigger /chaos
       - "${BLUE_PORT}:${APP_PORT}"
@@ -23,6 +24,7 @@ services:
     environment:
       - PORT=${APP_PORT}
       - RELEASE_ID=${RELEASE_ID_GREEN}
+      - APP_POOL=green
     ports:
       # Expose 8082 for grader
       - "${GREEN_PORT}:${APP_PORT}"

@@ -40,5 +40,6 @@ server {
         # are passed from the app to the client.
         # This is default behavior, but we're explicit.
         proxy_pass_request_headers  on;
+        proxy_buffering off; # Prevents Nginx from holding onto the response from the first attempt
     }
 }
