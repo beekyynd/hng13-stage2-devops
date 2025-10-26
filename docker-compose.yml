@@ -1,0 +1,55 @@
+# docker-compose.yml
+version: "3.8"
+
+services:
+  app_blue:
+    image: ${BLUE_IMAGE}
+    container_name: app_blue
+    environment:
+      - PORT=${APP_PORT}
+      - RELEASE_ID=${RELEASE_ID_BLUE}
+    ports:
+      # Expose 8081 for grader to trigger /chaos
+      - "${BLUE_PORT}:${APP_PORT}"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${APP_PORT}/healthz"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+
+  app_green:
+    image: ${GREEN_IMAGE}
+    container_name: app_green
+    environment:
+      - PORT=${APP_PORT}
+      - RELEASE_ID=${RELEASE_ID_GREEN}
+    ports:
+      # Expose 8082 for grader
+      - "${GREEN_PORT}:${APP_PORT}"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${APP_PORT}/healthz"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: nginx_lb
+    ports:
+      # Public entrypoint
+      - "${NGINX_PORT}:80"
+    environment:
+      # Pass env vars for templating
+      - ACTIVE_POOL=${ACTIVE_POOL}
+      - APP_PORT=${APP_PORT}
+    volumes:
+      # 1. Mount the template
+      - ./nginx.conf.template:/etc/nginx/templates/default.conf.template
+      # 2. Mount the entrypoint script
+      - ./nginx-entrypoint.sh:/docker-entrypoint.d/20-template.sh
+    command: [ "sh", "/docker-entrypoint.d/20-template.sh" ] # Run the script
+    depends_on:
+      app_blue:
+        condition: service_healthy
+      app_green:
+        condition: service_healthy
