@@ -14,19 +14,19 @@ server {
     listen 80;
 
     location / {
-        # --- Standard Proxy Headers ---
+        # Standard Proxy Headers
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # --- Timeouts ---
+        # Timeouts
         # Tight timeouts for fast failure detection
         proxy_connect_timeout 2s;
         proxy_send_timeout    2s;
         proxy_read_timeout    2s;
 
-        # --- Failover & Retry Logic ---
+        # Failover & Retry Logic
         # If a request fails, try the next server in the upstream
         # This handles the "zero failed client requests" requirement.
         proxy_next_upstream error timeout http_500 http_502 http_503 http_504;
@@ -35,11 +35,11 @@ server {
         # Pass requests to the upstream
         proxy_pass http://backend;
 
-        # --- Header Forwarding ---
+        # Header Forwarding
         # Ensures response headers (X-App-Pool, X-Release-Id)
         # are passed from the app to the client.
         # This is default behavior, but we're explicit.
         proxy_pass_request_headers  on;
-        proxy_buffering off; # Prevents Nginx from holding onto the response from the first attempt
+        proxy_buffering off;
     }
 }
