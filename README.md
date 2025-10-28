@@ -2,7 +2,7 @@
 
 This project demonstrates an automatic and manual Blue/Green deployment strategy using Nginx and Docker Compose.
 
-## :hammer_and_spanner: Setup
+## Setup
 
 1.  **Environment:** Copy the example `.env` file.
     ```sh
