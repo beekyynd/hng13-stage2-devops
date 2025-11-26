@@ -4,7 +4,7 @@ This file explains the core design choices for the Nginx Blue/Green implementati
 
 ## 1. Templating: `envsubst` + Entrypoint Script
 
-* **Problem:** The Nginx config needed to be dynamic based on the `ACTIVE_POOL` environment variable to determine which upstream server was `primary` and which was `backup`.
+* **Problem:** The Nginx config needed to be dynamic based on the `ACTIVE_POOL` environment variable to determine which upstream server was `primary` and which one was `backup`.
 * **Solution:** I used the standard `nginx` Docker image's entrypoint system.
     1.  A custom script `20-template.sh` is mounted into `/docker-entrypoint.d/`.
     2.  This script runs *before* Nginx starts.
