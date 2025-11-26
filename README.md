@@ -1,4 +1,4 @@
-# DevOps Stage 2: Nginx Blue/Green Failover
+# Nginx Blue/Green Failover
 
 This project demonstrates an automatic and manual Blue/Green deployment strategy using Nginx and Docker Compose.
 
