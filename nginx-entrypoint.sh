@@ -22,5 +22,5 @@ envsubst '$BLUE_ROLE $GREEN_ROLE $APP_PORT' < /etc/nginx/templates/default.conf.
 echo "NGINX: Configuration generated."
 cat /etc/nginx/conf.d/default.conf
 
-# Start Nginx in the foreground
+# Start Nginx
 exec nginx -g 'daemon off;'
